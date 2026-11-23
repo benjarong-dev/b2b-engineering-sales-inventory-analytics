@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B2B Engineering Backlog &amp; VMI Inventory BI Dashboard</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">INDUSTRIAL ENGINEERING &amp; VMI ANALYTICS</p>
+      <h1>Sales Pipeline, Backlog &amp; Spare-Parts Reorder Dashboard</h1>
+    </div>
+    <div class="controls">
+      <label>
+        Business Unit
+        <select id="buFilter">
+          <option value="ALL">All Business Units (4 Segments)</option>
+          <option value="Power & Flue-Gas">Power &amp; Flue-Gas</option>
+          <option value="Telecom & UPS">Telecom &amp; UPS</option>
+          <option value="Oil & Gas Support">Oil &amp; Gas Support</option>
+          <option value="Environmental & Clean Energy">Environmental &amp; Clean Energy</option>
+        </select>
+      </label>
+      <label>
+        Contract Type
+        <select id="dealFilter">
+          <option value="ALL">All Contract Types</option>
+          <option value="Direct Supply">Direct Equipment Supply</option>
+          <option value="Turnkey EPC">Turnkey EPC Installation</option>
+        </select>
+      </label>
+      <button id="exportBtn" type="button">Export VMI Alert CSV</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="kpi-grid" aria-label="Executive KPI Summary">
+      <article class="kpi-card">
+        <span class="kpi-label">Quotation Win-Rate</span>
+        <strong class="kpi-value" id="kpiWinRate">--%</strong>
+        <span class="kpi-sub" id="kpiDealCount">-- closed bids</span>
+      </article>
+      <article class="kpi-card">
+        <span class="kpi-label">Recognized Revenue</span>
+        <strong class="kpi-value" id="kpiRecognized">--M THB</strong>
+        <span class="kpi-sub">Delivered &amp; billed YTD</span>
+      </article>
+      <article class="kpi-card accent">
+        <span class="kpi-label">Contracted Backlog</span>
+        <strong class="kpi-value" id="kpiBacklog">--M THB</strong>
+        <span class="kpi-sub">Remaining scheduled recognition</span>
+      </article>
+      <article class="kpi-card">
+        <span class="kpi-label">Blended Gross Margin</span>
+        <strong class="kpi-value" id="kpiMargin">--%</strong>
+        <span class="kpi-sub" id="kpiMarginNote">Direct vs. EPC mix</span>
+      </article>
+      <article class="kpi-card alert">
+        <span class="kpi-label">VMI Reorder Alerts</span>
+        <strong class="kpi-value" id="kpiRopAlerts">0 SKUs</strong>
+        <span class="kpi-sub">95% service-level ROP breach</span>
+      </article>
+    </section>
+
+    <section class="chart-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Recognized Revenue vs. Remaining Backlog by Segment</h2>
+          <span class="legend">
+            <i class="dot rec"></i>Recognized
+            <i class="dot bkl"></i>Backlog
+          </span>
+        </div>
+        <div id="segmentChart" class="bar-list"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Profitability Mix: Direct Supply vs. Turnkey EPC</h2>
+          <span class="sub-badge">Gross Margin %</span>
+        </div>
+        <div id="mixSummary" class="mix-list"></div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>VMI Spare-Parts Pareto (ABC) &amp; Statistical Reorder Point (ROP) Monitor</h2>
+        <span class="sub-badge">Formula: Demand(LT) + 1.645 &times; &sigma; &times; &radic;LT</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Critical Spare Part</th>
+              <th>Business Unit</th>
+              <th>ABC Class</th>
+              <th class="num">Annual Spend (THB)</th>
+              <th class="num">On-Hand</th>
+              <th class="num">95% ROP</th>
+              <th class="num">Days Cover</th>
+              <th>Action Status</th>
+            </tr>
+          </thead>
+          <tbody id="vmiTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./dashboard.js"></script>
+</body>
+</html>
